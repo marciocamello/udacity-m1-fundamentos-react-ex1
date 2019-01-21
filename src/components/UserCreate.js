@@ -38,6 +38,7 @@ class UserCreate extends Component {
         }
     }
 
+    // start create user handle
     onCreateUser = event => {
         event.preventDefault();
 
@@ -48,8 +49,11 @@ class UserCreate extends Component {
 
         this.firstNameEl.current.value = '';
         this.lastNameEl.current.value = '';
+
+        this.validateForm();
     };
 
+    // validate inputs in form
     validateForm = () => {
         const validateInputs = this.firstNameEl.current.value.trim().length > 0 && this.lastNameEl.current.value.trim().length > 0;
         this.setState({ validateForm: !validateInputs })
