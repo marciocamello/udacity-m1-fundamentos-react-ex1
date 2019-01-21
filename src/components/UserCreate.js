@@ -8,6 +8,9 @@ import FormControl from '@material-ui/core/FormControl';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import Chip from '@material-ui/core/Chip';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const styles = theme => ({
     main: {
@@ -25,6 +28,13 @@ const styles = theme => ({
     submit: {
         marginTop: theme.spacing.unit * 3,
     },
+    chips: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    chip: {
+        margin: theme.spacing.unit / 4,
+    }
 });
 
 class UserCreate extends Component {
@@ -33,10 +43,16 @@ class UserCreate extends Component {
         super(props);
         this.firstNameEl = React.createRef();
         this.lastNameEl = React.createRef();
+        this.listGames = React.createRef();
         this.state = {
+            listGames: [],
             validateForm: true
         }
     }
+
+    handleChange = event => {
+        this.setState({ listGames: event.target.value });
+    };
 
     // start create user handle
     onCreateUser = event => {
@@ -44,11 +60,17 @@ class UserCreate extends Component {
 
         const firstName = this.firstNameEl.current.value;
         const lastName = this.lastNameEl.current.value;
+        const listGames = this.state.listGames;
 
-        this.props.onCreateUser(event, firstName, lastName);
+        this.props.onCreateUser(event,{
+            firstName,
+            lastName,
+            listGames
+        });
 
         this.firstNameEl.current.value = '';
         this.lastNameEl.current.value = '';
+        this.setState({ listGames: [] });
 
         this.validateForm();
     };
@@ -60,6 +82,19 @@ class UserCreate extends Component {
     };
 
     render() {
+
+        // games
+        const games = [
+            'God of War 4',
+            'Red Dead Redemption 2',
+            'Assassin\'s Creed Odyssey',
+            'Sea of Thieves',
+            'No Man\'s Sky',
+            'State Of Decay 2',
+            'Mortal Kombat X',
+            'Forza Horizon 4',
+            'Days Gone'
+        ];
 
         const {classes} = this.props;
 
@@ -76,6 +111,28 @@ class UserCreate extends Component {
                         <FormControl margin="normal" required fullWidth>
                             <InputLabel htmlFor="lastName">Last Name</InputLabel>
                             <Input name="lastName" id="lastName" inputRef={this.lastNameEl}/>
+                        </FormControl>
+                        <FormControl margin="normal" required fullWidth>
+                            <InputLabel htmlFor="listGames">Games List</InputLabel>
+                            <Select
+                                multiple
+                                value={this.state.listGames}
+                                onChange={this.handleChange}
+                                input={<Input id="listGames" />}
+                                renderValue={selected => (
+                                    <div className={classes.chips}>
+                                        {selected.map(value => (
+                                            <Chip key={value} label={value} className={classes.chip} />
+                                        ))}
+                                    </div>
+                                )}
+                            >
+                                {games.map(name => (
+                                    <MenuItem key={name} value={name}>
+                                        {name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
                         </FormControl>
                         <Button
                             type="submit"

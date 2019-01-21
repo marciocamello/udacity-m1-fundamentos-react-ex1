@@ -4,7 +4,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
 import GenerateId from './components/Utils/GenerateId';
-import Notifier, { openAlert } from './components/Utils/Alert';
+import Notifier, {openAlert} from './components/Utils/Alert';
 import UserCreate from './components/UserCreate';
 import UserList from './components/UserList';
 
@@ -13,7 +13,7 @@ import './App.css';
 class App extends Component {
 
     // constructor
-    constructor (props) {
+    constructor(props) {
 
         super(props);
 
@@ -41,15 +41,15 @@ class App extends Component {
     updateAndSave = users => {
 
         this.updateLocalStorage(users);
-        this.setState({ users });
+        this.setState({users});
     };
 
     // Remove user and update state
     removeUser = user => {
 
-        if(window.confirm('You are sure')){
+        if (window.confirm('You are sure')) {
 
-            let { users } = this.state;
+            let {users} = this.state;
 
             users = users.filter(u => {
                 return u.id !== user.id
@@ -62,7 +62,7 @@ class App extends Component {
     // filter if user has exist
     filterUserByUsername = username => {
 
-        let { users } = this.state;
+        let {users} = this.state;
 
         return users.filter(u => {
 
@@ -72,25 +72,27 @@ class App extends Component {
     };
 
     // save user handler
-    saveUserHandler = (event, firstName, lastName) => {
+    saveUserHandler = (event, state) => {
 
         event.preventDefault();
 
-        let { users } = this.state;
+        let {users} = this.state;
 
-        const userId = window.btoa(GenerateId(firstName + lastName));
+        const userName = state.firstName + state.lastName;
 
-        if(this.filterUserByUsername(firstName + lastName).length > 0){
-            openAlert({ message: `This user ${firstName} has exist`, color:  'error' });
+        const userId = window.btoa(GenerateId(userName));
+
+        if (this.filterUserByUsername(userName).length > 0) {
+            openAlert({message: `This user ${state.firstName} has exist`, color: 'error'});
             return;
         }
 
         const newUser = {
             id: userId,
-            firstName: firstName.trim(),
-            lastName: lastName,
+            firstName: state.firstName.trim(),
+            lastName: state.lastName,
             avatar: `https://material-ui.com/static/images/avatar/${Math.floor(Math.random() * 2) + 1}.jpg`,
-            games: 0
+            games: state.listGames
         };
 
         users = users.concat(newUser);
@@ -101,7 +103,7 @@ class App extends Component {
 
         return (
             <div className="App">
-                <Notifier />
+                <Notifier/>
                 <AppBar position="static" color="primary">
                     <Toolbar>
                         <Typography variant="h6" color="inherit">
