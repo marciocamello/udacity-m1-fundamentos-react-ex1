@@ -107,7 +107,7 @@ class App extends Component {
                 <AppBar position="static" color="primary">
                     <Toolbar>
                         <Typography variant="h6" color="inherit">
-                            VideoGame List
+                            Video Game List
                         </Typography>
                     </Toolbar>
                 </AppBar>
